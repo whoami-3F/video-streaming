@@ -1,9 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
 const userSchema = new Schema(
   {
-    firstName: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
@@ -24,7 +25,7 @@ const userSchema = new Schema(
       trim: true,
     },
     password: {
-      type: string,
+      type: String,
       required: [true, "Password is required"],
     },
     avatar: {
