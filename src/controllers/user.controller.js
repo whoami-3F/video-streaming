@@ -165,7 +165,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     req.cookies.refreshToken || req.body.refreshToken;
 
   if (!incomingRefreshToken) {
-    throw new ApiError(401, "unauthorized request");
+    throw new apiError(401, "unauthorized request");
   }
 
   try {
@@ -177,11 +177,11 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const user = await User.findById(decodedToken?._id);
 
     if (!user) {
-      throw new ApiError(401, "Invalid refresh token");
+      throw new apiError(401, "Invalid refresh token");
     }
 
     if (incomingRefreshToken !== user?.refreshToken) {
-      throw new ApiError(401, "Refresh token is expired or used");
+      throw new apiError(401, "Refresh token is expired or used");
     }
 
     const options = {
@@ -197,14 +197,14 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       .cookie("accessToken", accessToken, options)
       .cookie("refreshToken", newRefreshToken, options)
       .json(
-        new ApiResponse(
+        new apiResponse(
           200,
           { accessToken, refreshToken: newRefreshToken },
           "Access token refreshed"
         )
       );
   } catch (error) {
-    throw new ApiError(401, error?.message || "Invalid refresh token");
+    throw new apiError(401, error?.message || "Invalid refresh token");
   }
 });
 
@@ -293,7 +293,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 const updateUserCoverImage = asyncHandler(async (req, res) => {
   const coverImageLocalPath = req.file?.path;
 
-  if (!CoverImageLocalPath) {
+  if (!coverImageLocalPath) {
     throw new apiError(400, "CoverImage file is missing");
   }
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
@@ -384,7 +384,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new apiResponse(200, Channel[0], "User channel fetch successfully"));
+    .json(new apiResponse(200, channel[0], "User channel fetch successfully"));
 });
 
 const getWatchHistory = asyncHandler(async (req, res) => {
